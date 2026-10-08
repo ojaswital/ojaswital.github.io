@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Ojaswita, research engineer in computational pathology for pancreatic cancer at UW-Madison.">
+<title>Ojaswita</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single reading column, hero with an H&E tissue-tile canvas beside the name; sections as label column + content column on wide screens */
+:root {
+  --bg: #FBF8FA;
+  --surface: #F3EDF3;
+  --ink: #221D3A;          /* hematoxylin */
+  --muted: #5E5871;
+  --line: #E1D8E3;
+  --accent: #B8335F;       /* eosin */
+  --accent-soft: #F4DCE5;
+  --nuc: #3E3478;
+  --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16131F; --surface: #211C2E; --ink: #EDE8F2; --muted: #A9A1B8;
+    --line: #342D44; --accent: #F07BA3; --accent-soft: #3A2231; --nuc: #9C8EE0;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #16131F; --surface: #211C2E; --ink: #EDE8F2; --muted: #A9A1B8;
+  --line: #342D44; --accent: #F07BA3; --accent-soft: #3A2231; --nuc: #9C8EE0;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--body); font-size: 1.0625rem; line-height: 1.6;
+  padding-inline: 20px; padding-block: 0 64px;
+}
+.wrap { max-width: 980px; margin: 0 auto; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+/* Hero */
+header.hero {
+  display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 40px;
+  align-items: end; padding-block: 72px 48px; border-bottom: 1px solid var(--line);
+}
+.eyebrow {
+  font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--muted); margin: 0 0 16px;
+}
+h1 {
+  font-family: var(--display); font-weight: 700; font-size: clamp(2.8rem, 8vw, 5rem);
+  line-height: 0.95; letter-spacing: -0.03em; margin: 0 0 20px; text-wrap: balance;
+}
+h1 .dot { color: var(--accent); }
+.lede { font-size: 1.25rem; line-height: 1.5; max-width: 34em; margin: 0; color: var(--ink); }
+.lede em { font-style: italic; color: var(--muted); }
+.tile { margin: 0; }
+.tile canvas {
+  display: block; width: 100%; max-width: 260px; aspect-ratio: 1; height: auto;
+  border-radius: 3px; background: var(--surface);
+}
+.tile figcaption {
+  font-family: var(--mono); font-size: 0.72rem; color: var(--muted);
+  margin-top: 8px; display: flex; justify-content: space-between; gap: 8px;
+}
+
+/* Sections */
+section {
+  display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 32px;
+  padding-block: 44px; border-bottom: 1px solid var(--line);
+}
+section:last-of-type { border-bottom: 0; }
+h2 {
+  font-family: var(--mono); font-weight: 500; font-size: 0.78rem;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent);
+  margin: 6px 0 0;
+}
+.content { min-width: 0; max-width: 40em; }
+.content p { margin: 0 0 1em; }
+.content p:last-child { margin-bottom: 0; }
+h3 {
+  font-family: var(--display); font-weight: 500; font-size: 1.3rem;
+  line-height: 1.25; letter-spacing: -0.01em; margin: 0 0 6px; text-wrap: balance;
+}
+
+/* Research list */
+.aims { list-style: none; padding: 0; margin: 0; display: grid; gap: 28px; }
+.aims li { display: grid; gap: 4px; }
+.aims p { margin: 0; color: var(--ink); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.tag {
+  font-family: var(--mono); font-size: 0.72rem; padding: 2px 8px;
+  border-radius: 999px; background: var(--accent-soft); color: var(--ink);
+}
+
+/* Experience */
+.roles { list-style: none; padding: 0; margin: 0; display: grid; gap: 26px; }
+.role { display: grid; gap: 2px; }
+.org { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+.role p { margin: 6px 0 0; }
+
+/* Highlights */
+.marks { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.marks li { display: grid; grid-template-columns: 1.1rem minmax(0, 1fr); gap: 10px; }
+.marks li::before {
+  content: ""; width: 9px; height: 9px; margin-top: 0.55em; border-radius: 50%;
+  background: var(--nuc);
+}
+
+/* Contact */
+.contact { display: grid; gap: 12px; }
+.row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 16px; }
+.row .k { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); min-width: 5.5em; }
+.row .v { font-family: var(--mono); font-size: 0.92rem; user-select: all; overflow-wrap: anywhere; }
+button.copy {
+  font-family: var(--mono); font-size: 0.72rem; color: var(--ink);
+  background: transparent; border: 1px solid var(--line); border-radius: 4px;
+  padding: 3px 9px; cursor: pointer;
+}
+button.copy:hover { border-color: var(--accent); }
+.links { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 8px; }
+.placeholder { color: var(--muted); font-style: italic; }
+
+footer { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); padding-top: 24px; }
+
+@media (max-width: 720px) {
+  header.hero { grid-template-columns: 1fr; padding-block: 48px 36px; gap: 28px; }
+  .tile canvas { max-width: 200px; }
+  .tile figcaption { max-width: 200px; }
+  section { grid-template-columns: 1fr; gap: 14px; padding-block: 34px; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Research Engineer · Radiology · UW-Madison</p>
+      <h1>Ojaswita<span class="dot">.</span></h1>
+      <p class="lede">I build computational pathology models for pancreatic cancer. My work turns H&amp;E whole-slide images into measurements of the tumor microenvironment and tests whether they predict how patients do.</p>
+    </div>
+    <figure class="tile" aria-label="Illustration of an H&amp;E tissue tile">
+      <canvas id="tile" width="520" height="520"></canvas>
+      <figcaption><span>H&amp;E tile, 256 × 256</span><span>1.0 µm/px</span></figcaption>
+    </figure>
+  </header>
+
+  <section id="about">
+    <h2>About</h2>
+    <div class="content">
+      <p>I'm a research engineer in Dr. Pallavi Tiwari's Integrated Diagnostics and Analytics (IDIA) Lab in the Department of Radiology at the University of Wisconsin–Madison. I work on pancreatic ductal adenocarcinoma (PDAC), with oncologists and pathologists, on problems where a better model could change a treatment decision.</p>
+      <p>Before this I spent four years at AIQ Solutions, where I helped build an FDA 510(k)-cleared PET/CT product and led survival analysis research. I care most about translational work: methods that hold up on external data and reach patients.</p>
+    </div>
+  </section>
+
+  <section id="research">
+    <h2>Research</h2>
+    <div class="content">
+      <ul class="aims">
+        <li>
+          <h3>Tumor microenvironment phenotypes in PDAC</h3>
+          <p>I classify tissue tiles into tumor, stroma, inflammatory and other compartments, embed each with pathology foundation models, and feed those phenotype-aware embeddings into survival models. The models are validated on an external cohort from PanCAN's SPARK platform.</p>
+          <div class="tags"><span class="tag">whole-slide imaging</span><span class="tag">attention MIL</span><span class="tag">survival analysis</span></div>
+        </li>
+        <li>
+          <h3>Treatment response and molecular subtype</h3>
+          <p>The same phenotyping pipeline supports two other questions: predicting molecular subtype from H&amp;E, and predicting response to neoadjuvant therapy from pre-treatment biopsies and paired resections.</p>
+          <div class="tags"><span class="tag">neoadjuvant therapy</span><span class="tag">molecular subtyping</span></div>
+        </li>
+        <li>
+          <h3>Spatial graphs and multimodal data</h3>
+          <p>I'm building graph models of tissue where edges encode which compartments touch, and working toward combining pathology with radiology and clinical reports.</p>
+          <div class="tags"><span class="tag">graph neural networks</span><span class="tag">radiology + pathology</span><span class="tag">LLMs for reports</span></div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="experience">
+    <h2>Experience</h2>
+    <div class="content">
+      <ul class="roles">
+        <li class="role">
+          <h3>Research Engineer</h3>
+          <span class="org">IDIA Lab, Department of Radiology, UW-Madison</span>
+          <p>Computational pathology pipelines for PDAC survival, subtype and treatment response. End-to-end: slide QC, tiling, foundation-model inference on a GPU cluster, modeling, and pathologist review tools.</p>
+        </li>
+        <li class="role">
+          <h3>Research Scientist, previously Data Scientist</h3>
+          <span class="org">AIQ Solutions</span>
+          <p>Four years on quantitative PET/CT imaging. Contributed to a 510(k)-cleared clinical product and first-authored survival analysis research. Also worked on SBIR grant writing and FDA regulatory submissions.</p>
+        </li>
+        <li class="role">
+          <h3>Graduate Researcher</h3>
+          <span class="org">NYU Video Lab</span>
+          <p>Multiple sclerosis lesion segmentation on MRI.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="education">
+    <h2>Education</h2>
+    <div class="content">
+      <ul class="roles">
+        <li class="role">
+          <h3>MS, Electrical Engineering</h3>
+          <span class="org">New York University</span>
+          <p>Signal and image processing, machine learning.</p>
+        </li>
+        <li class="role">
+          <h3>BE, Electronics and Telecommunication Engineering</h3>
+          <span class="org"><span class="placeholder">Institution</span></span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="highlights">
+    <h2>Highlights</h2>
+    <div class="content">
+      <ul class="marks">
+        <li><span>Manuscript in preparation for SPIE Medical Imaging 2027 on phenotype-aware TME survival modeling in PDAC.</span></li>
+        <li><span>Poster at the PanCAN SPARK Summit.</span></li>
+        <li><span>Contributor to an FDA 510(k)-cleared PET/CT product.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <div class="content contact">
+      <div class="row">
+        <span class="k">Email</span>
+        <span class="v" id="email">you@wisc.edu</span>
+        <button class="copy" id="copyEmail" type="button">Copy</button>
+      </div>
+      <div class="row">
+        <span class="k">ORCID</span>
+        <a class="v" href="https://orcid.org/0000-0000-0000-0000" rel="noopener">0000-0000-0000-0000</a>
+      </div>
+      <div class="links">
+        <a href="https://www.webofscience.com/wos/author/record/0000000" rel="noopener">Web of Science</a>
+        <a href="https://scholar.google.com/" rel="noopener">Google Scholar</a>
+        <a href="https://www.linkedin.com/" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>Madison, Wisconsin</footer>
+</div>
+
+<script>
+(function () {
+  // Stylized H&E tile: pink eosin stroma fibers with purple hematoxylin nuclei
+  var c = document.getElementById('tile');
+  var ctx = c.getContext('2d');
+  var W = c.width, H = c.height;
+  var css = getComputedStyle(document.documentElement);
+  var dark = matchMedia('(prefers-color-scheme: dark)').matches &&
+             document.documentElement.getAttribute('data-theme') !== 'light' ||
+             document.documentElement.getAttribute('data-theme') === 'dark';
+  var seed = 7;
+  function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+
+  ctx.fillStyle = dark ? '#2A1F2E' : '#F6E3EA';
+  ctx.fillRect(0, 0, W, H);
+
+  // Stroma fibers
+  for (var i = 0; i < 70; i++) {
+    ctx.beginPath();
+    var x = rnd() * W, y = rnd() * H, a = 0.5 + rnd() * 0.4;
+    ctx.moveTo(x, y);
+    for (var s = 0; s < 6; s++) {
+      x += Math.cos(a) * 40 + (rnd() - 0.5) * 18;
+      y += Math.sin(a) * 40 + (rnd() - 0.5) * 18;
+      ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = dark ? 'rgba(240,123,163,' + (0.15 + rnd() * 0.25) + ')'
+                           : 'rgba(210,90,135,' + (0.18 + rnd() * 0.3) + ')';
+    ctx.lineWidth = 3 + rnd() * 7;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+  }
+
+  // Gland-like clusters with dense nuclei
+  function cluster(cx, cy, r, n) {
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fillStyle = dark ? 'rgba(200,120,170,0.18)' : 'rgba(220,150,185,0.35)';
+    ctx.fill();
+    for (var k = 0; k < n; k++) {
+      var t = rnd() * Math.PI * 2, d = r * (0.75 + rnd() * 0.25);
+      nucleus(cx + Math.cos(t) * d, cy + Math.sin(t) * d, 6 + rnd() * 4);
+    }
+  }
+  function nucleus(x, y, r) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rnd() * Math.PI);
+    ctx.beginPath(); ctx.ellipse(0, 0, r, r * (0.6 + rnd() * 0.3), 0, 0, Math.PI * 2);
+    ctx.fillStyle = dark ? 'rgba(156,142,224,' + (0.6 + rnd() * 0.35) + ')'
+                         : 'rgba(62,52,120,' + (0.6 + rnd() * 0.35) + ')';
+    ctx.fill(); ctx.restore();
+  }
+  cluster(150, 170, 80, 34);
+  cluster(380, 360, 95, 40);
+  cluster(390, 110, 50, 20);
+
+  // Scattered stromal and immune nuclei
+  for (var j = 0; j < 140; j++) nucleus(rnd() * W, rnd() * H, 3 + rnd() * 4);
+
+  // Copy email
+  var btn = document.getElementById('copyEmail');
+  var email = document.getElementById('email');
+  btn.addEventListener('click', function () {
+    var text = email.textContent.trim();
+    function selectIt() {
+      var r = document.createRange(); r.selectNodeContents(email);
+      var sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      btn.textContent = 'Selected';
+    }
+    try {
+      navigator.clipboard.writeText(text).then(function () { btn.textContent = 'Copied'; }, selectIt);
+    } catch (e) { selectIt(); }
+    setTimeout(function () { btn.textContent = 'Copy'; }, 1800);
+  });
+})();
+</script>
+</body>
+</html>
